@@ -1,0 +1,9 @@
+
+# CMake build folders
+build
+
+# macOS temporary files
+*.DS_Store
+
+# Visual Studio Code settings
+*.vscode
