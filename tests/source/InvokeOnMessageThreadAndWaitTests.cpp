@@ -13,17 +13,17 @@ SCENARIO ("Functions can be run on the message thread synchronously, from anothe
         AND_GIVEN ("The current thread is not the message thread")
         {
             REQUIRE_FALSE (manager->isThisTheMessageThread());
-            
+
             WHEN ("A function is invoked on the message thread")
             {
                 std::optional<bool> didFunctionRunOnTheMessageThread {std::nullopt};
-                
-                jucey::invokeOnMessageThreadAndWait ([&manager, &didFunctionRunOnTheMessageThread](){
+
+                jucey::invokeOnMessageThreadAndWait ([&manager, &didFunctionRunOnTheMessageThread]() {
                     const auto enoughTimeToEnsureThisRunsSynchronously {std::chrono::milliseconds {100}};
                     std::this_thread::sleep_for (enoughTimeToEnsureThisRunsSynchronously);
-                    didFunctionRunOnTheMessageThread = manager->isThisTheMessageThread(); 
+                    didFunctionRunOnTheMessageThread = manager->isThisTheMessageThread();
                 });
-                
+
                 THEN ("The function is invoked synchronously") { REQUIRE (didFunctionRunOnTheMessageThread.has_value()); }
                 THEN ("The function is invoked on the message thread") { REQUIRE (didFunctionRunOnTheMessageThread.value()); }
             }

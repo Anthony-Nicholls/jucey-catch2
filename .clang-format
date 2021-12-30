@@ -1,0 +1,94 @@
+# Global Settings
+---
+# General
+DisableFormat: 'false'
+ColumnLimit: '0'
+SortIncludes: 'false'
+
+# Alignment
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: 'false'
+AlignConsecutiveDeclarations: 'false'
+AlignEscapedNewlinesLeft: 'false'
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+ReflowComments: 'false'
+IndentPPDirectives: AfterHash
+
+# Indentation
+AccessModifierOffset: '-4'
+ConstructorInitializerIndentWidth: '4'
+ContinuationIndentWidth: '4'
+IndentCaseLabels: 'true'
+IndentWidth: '4'
+IndentWrappedFunctionNames: 'true'
+NamespaceIndentation: All
+TabWidth: '4'
+UseTab: Never
+
+# Line breaks
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortBlocksOnASingleLine: 'Always'
+AllowShortCaseLabelsOnASingleLine: 'true'
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: 'true'
+AllowShortLoopsOnASingleLine: 'true'
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: 'false'
+AlwaysBreakTemplateDeclarations: 'true'
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakAfterJavaFieldAnnotations: 'false'
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel:  true
+    AfterClass:      true
+    AfterControlStatement: Always
+    AfterEnum:       true
+    AfterFunction:   true
+    AfterNamespace:  true
+    AfterObjCDeclaration: true
+    AfterStruct:     true
+    AfterUnion:      true
+    AfterExternBlock: true
+    BeforeCatch:     true
+    BeforeElse:      true
+    BeforeLambdaBody: false
+    BeforeWhile:     false
+    IndentBraces:    false
+    SplitEmptyFunction: true
+    SplitEmptyRecord: true
+    SplitEmptyNamespace: true
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializersBeforeComma: 'true'
+BreakInheritanceList: 'BeforeComma'
+BreakStringLiterals: 'false'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+KeepEmptyLinesAtTheStartOfBlocks: 'false'
+MaxEmptyLinesToKeep: '1'
+
+# Spaces
+DerivePointerAlignment: 'false'
+PointerAlignment: Left
+SpaceAfterCStyleCast: 'true'
+SpaceAfterLogicalNot: 'true'
+SpaceAfterTemplateKeyword: 'false'
+SpaceBeforeAssignmentOperators: 'true'
+SpaceBeforeInheritanceColon: 'true'
+SpaceBeforeParens: NonEmptyParentheses
+SpaceInEmptyParentheses: 'false'
+SpacesInAngles: 'false'
+SpacesInCStyleCastParentheses: 'false'
+SpacesInContainerLiterals: 'false'
+SpacesInParentheses: 'false'
+SpacesInSquareBrackets: 'false'
+
+#Language Specific Settings
+
+#Cpp
+---
+Language: Cpp
+Standard: Cpp11
+Cpp11BracedListStyle: 'true'
+SpaceBeforeCpp11BracedList: 'true'

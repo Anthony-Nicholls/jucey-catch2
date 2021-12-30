@@ -7,7 +7,7 @@ namespace jucey
     public:
         Catch2TestRunner() = default;
         ~Catch2TestRunner() = default;
-        
+
     private:
         const juce::String getApplicationName() final;
 
@@ -30,8 +30,8 @@ namespace jucey
         void unhandledException (const std::exception*,
                                  const juce::String&,
                                  int) final;
-        
+
         JUCE_DECLARE_NON_COPYABLE (Catch2TestRunner)
         JUCE_DECLARE_NON_MOVEABLE (Catch2TestRunner)
     };
-} // jucey
+} // namespace jucey

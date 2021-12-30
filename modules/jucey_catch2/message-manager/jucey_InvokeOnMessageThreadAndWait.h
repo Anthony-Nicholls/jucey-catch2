@@ -3,4 +3,4 @@
 namespace jucey
 {
     void invokeOnMessageThreadAndWait (const std::function<void()>& function);
-} // jucey
+} // namespace jucey
