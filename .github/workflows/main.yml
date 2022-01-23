@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # every night at midnight
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: python3 scripts/install-dependencies.py
+
+      - name: Check file formatting
+        run: python3 scripts/format.py --check
+
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ macos-latest, windows-latest, ubuntu-latest ]
+        
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install linux dependencies
+        if: runner.os == 'Linux'
+        run: | 
+          sudo apt-get install libfreetype6-dev
+          sudo apt-get install libx11-dev
+          sudo apt-get install libxcomposite-dev
+          sudo apt-get install libxcursor-dev
+          sudo apt-get install libxext-dev
+          sudo apt-get install libxinerama-dev
+          sudo apt-get install libxrandr-dev
+          sudo apt-get install libxrender-dev
+
+      - name: Generate project
+        run: python3 scripts/build.py --generate
+
+      - name: Build all targets
+        run: python3 scripts/build.py --build
+
+      - name: Run tests
+        run: python3 scripts/build.py --run-tests
