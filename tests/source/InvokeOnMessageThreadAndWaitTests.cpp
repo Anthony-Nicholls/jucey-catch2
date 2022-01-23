@@ -1,6 +1,9 @@
 #include <catch2/catch_test_macros.hpp>
+
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <jucey_catch2/jucey_catch2.h>
+
+#include <optional>
 #include <thread>
 
 SCENARIO ("Functions can be run on the message thread synchronously, from another thread")

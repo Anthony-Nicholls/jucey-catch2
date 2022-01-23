@@ -2,29 +2,28 @@ import os
 import shutil
 import subprocess
 import sys
-import time
 
 from contextlib import contextmanager
 from pathlib import Path
 
 
-class Colour:
-    OK = '\033[92m'
-    FAIL = '\033[91m'
-    CLEAR = '\033[0m'
-
-
-def with_colour(colour: Colour, text: str):
+def apply_colour_to_text(colour_code, text: str):
     if sys.stdout.isatty():
-        return f'{colour}{text}{Colour.CLEAR}'
+        return f'{colour_code}{text}\033[0m'
 
     return text
 
 
-def exit(message: str):
-    if message:
-        exit(with_colour(Colour.FAIL, message))
-    exit()
+def green_text(text: str):
+    return apply_colour_to_text('\033[92m', text)
+
+
+def red_text(text: str):
+    return apply_colour_to_text('\033[91m', text)
+
+
+def grey_text(text: str):
+    return apply_colour_to_text('\033[90m', text)
 
 
 def git_repo_dir():
@@ -50,49 +49,21 @@ def git_repo_as_working_dir():
 def list_git_files():
     git_files = subprocess.run(
         ['git', 'ls-files', '--cached', '--others', '--exclude-standard'],
-        capture_output=True,
         check=True,
-        universal_newlines=True).stdout.splitlines()
+        universal_newlines=True,
+        capture_output=True).stdout.splitlines()
 
     deleted_git_files = subprocess.run(
         ['git', 'ls-files', '--deleted'],
-        capture_output=True,
         check=True,
-        universal_newlines=True).stdout.splitlines()
+        universal_newlines=True,
+        capture_output=True).stdout.splitlines()
 
     return [Path(file) for file in git_files if file not in deleted_git_files]
 
 
-@contextmanager
-def status(message):
-    print(f'-- {message}')
-    start_time = time.perf_counter()
-    try:
-        yield
-    except BaseException:
-        print(with_colour(Colour.FAIL, f'-- {message} - failed'))
-    else:
-        end_time = time.perf_counter()
-        elapsed_time = end_time - start_time
-        print(with_colour(
-            Colour.OK, f'-- {message} - done ({elapsed_time:.2f} sec)'))
-
-
-def is_cpp_file(file: Path):
-    return file.suffix in ['.h', '.hpp', '.c', '.cpp']
-
-
-def is_cmake_file(file: Path):
-    return file.name == 'CMakeLists.txt' or file.suffix == '.cmake'
-
-
-def is_python_file(file: Path):
-    return file.suffix == '.py'
-
-
 def remove_dir(dir: Path):
-    with status(f'Removing directory: {os.path.relpath(str(dir))}'):
-        try:
-            shutil.rmtree(dir)
-        except FileNotFoundError:
-            pass
+    try:
+        shutil.rmtree(dir)
+    except FileNotFoundError:
+        pass

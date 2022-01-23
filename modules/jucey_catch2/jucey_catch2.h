@@ -21,5 +21,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
+#include <future>
+
 #include "message-manager/jucey_InvokeOnMessageThreadAndWait.h"
 #include "runner/jucey_Catch2TestRunner.h"

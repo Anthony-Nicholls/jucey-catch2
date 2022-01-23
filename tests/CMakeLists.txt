@@ -10,6 +10,8 @@ target_link_libraries(
 
 target_compile_features(jucey-catch2-tests PRIVATE cxx_std_17)
 
+target_compile_definitions(jucey-catch2-tests PRIVATE JUCE_USE_CURL=0)
+
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 
 include(CTest)

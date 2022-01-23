@@ -6,40 +6,40 @@ from pathlib import Path
 
 
 def generate(build_dir: Path, generator: str = ''):
-    with utils.status(f'Generating {generator} project'.replace('  ', ' ')):
-        command = ['cmake']
-        command += ['-D', 'JUCEY_CATCH2_FETCH_CATCH2=ON']
-        command += ['-D', 'JUCEY_CATCH2_FETCH_JUCE=ON']
-        command += ['-D', 'JUCEY_CATCH2_ADD_TEST_TARGETS=ON']
-        command += ['-B', f'{build_dir}']
+    print(f'Generating {generator} project'.replace('  ', ' ') + '...')
+    command = ['cmake']
+    command += ['-D', 'JUCEY_CATCH2_FETCH_CATCH2=ON']
+    command += ['-D', 'JUCEY_CATCH2_FETCH_JUCE=ON']
+    command += ['-D', 'JUCEY_CATCH2_ADD_TEST_TARGETS=ON']
+    command += ['-B', f'{build_dir}']
 
-        if generator != '':
-            command += ['-G', generator]
+    if generator != '':
+        command += ['-G', generator]
 
-        subprocess.check_call(command)
+    subprocess.check_call(command)
 
 
 def build(build_dir: Path, config: str):
-    with utils.status(f'Building {config} targets'):
-        command = ['cmake']
-        command += ['--build', f'{build_dir}']
-        command += ['--config', config]
-        command += ['--parallel 8']
-        subprocess.check_call(command)
+    print(f'Building {config} targets...')
+    command = ['cmake']
+    command += ['--build', f'{build_dir}']
+    command += ['--config', config]
+    command += ['--parallel 8']
+    subprocess.check_call(command)
 
 
 def run_tests(tests_dir: Path, config: str):
-    with utils.status('Running test targets'):
-        command = ['ctest']
-        command += ['-j', '64']
-        command += ['-T', 'Test']
-        command += ['-C', config]
-        command += ['--test-dir', f'{tests_dir}']
-        command.append('--stop-on-failure')
-        command.append('--no-label-summary')
-        command.append('--no-compress-output')
-        command.append('--force-new-ctest-process')
-        subprocess.check_call(command)
+    print(f'Running test targets...')
+    command = ['ctest']
+    command += ['-j', '64']
+    command += ['-T', 'Test']
+    command += ['-C', config]
+    command += ['--test-dir', f'{tests_dir}']
+    command.append('--stop-on-failure')
+    command.append('--no-label-summary')
+    command.append('--no-compress-output')
+    command.append('--force-new-ctest-process')
+    subprocess.check_call(command)
 
 
 def main():
