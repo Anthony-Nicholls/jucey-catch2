@@ -7,3 +7,6 @@ build
 
 # Visual Studio Code settings
 *.vscode
+
+# temporary pythin files
+*.pyc

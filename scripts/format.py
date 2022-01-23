@@ -1,59 +1,87 @@
+import argparse
 import subprocess
+import utils
 
 from pathlib import Path
 
 
-def git_filenames(working_dir: Path):
-    return subprocess.run(
-        ['git', 'ls-files', '--cached', '--others', '--exclude-standard'],
-        cwd=working_dir.resolve(),
-        capture_output=True,
-        check=True,
-        universal_newlines=True).stdout.splitlines()
+def apply_cpp_formatting(file: Path):
+    with utils.status(f'Applying clang-format: {file}'):
+        subprocess.check_call(['clang-format', '-i', file])
 
 
-def is_cpp_file(file: Path):
-    return file.suffix in ['.h', '.hpp', '.c', '.cpp']
+def apply_cmake_formatting(file: Path):
+    with utils.status(f'Applying cmake-format: {file}'):
+        subprocess.check_call(['cmake-format', '-i', file])
 
 
-def is_cmake_file(file: Path):
-    return file.name == 'CMakeLists.txt' or file.suffix == '.cmake'
+def apply_python_formatting(file: Path):
+    with utils.status(f'Applying autopep8: {file}'):
+        subprocess.check_call(['autopep8', '-i', file])
 
 
-def is_python_file(file: Path):
-    return file.suffix == '.py'
+def apply_formatting_to_file(file: Path):
+    if utils.is_cpp_file(file):
+        apply_cpp_formatting(file)
+
+    if utils.is_cmake_file(file):
+        apply_cmake_formatting(file)
+
+    if utils.is_python_file(file):
+        apply_python_formatting(file)
 
 
-def apply_clang_format(file: Path):
-    print(f'-- applying clang-format to {file.resolve()}')
-    subprocess.run(['clang-format', '-i', file.resolve()], check=True)
+def apply_formatting_to_files(files):
+    for file in files:
+        apply_formatting_to_file(file)
 
 
-def apply_cmake_format(file: Path):
-    print(f'-- applying cmake-format to {file.resolve()}')
-    subprocess.run(['cmake-format', '-i', file.resolve()], check=True)
+def cpp_file_needs_formatting(file: Path):
+    with utils.status(f'Running clang-format checks: {file}'):
+        subprocess.check_call(['clang-format', '--dry-run', '--Werror', file])
+        return False
+    return True
 
 
-def apply_autopep8(file: Path):
-    print(f'-- applying autopep8 to {file.resolve()}')
-    subprocess.run(['autopep8', '-a', '-a', '-i', file.resolve()], check=True)
+def cmake_file_needs_formatting(file: Path):
+    with utils.status(f'Running cmake-format checks: {file}'):
+        subprocess.check_call(['cmake-format', '--check', file])
+        return False
+    return True
 
 
-def main():
-    parent_dir = Path(__file__).parent.parent
+def python_file_needs_formatting(file: Path):
+    with utils.status(f'Running autopep8 checks: {file}'):
+        subprocess.check_call(
+            ['autopep8', '--exit-code', file], stdout=subprocess.PIPE)
+        return False
+    return True
 
-    for filename in git_filenames(parent_dir):
-        file_path = parent_dir / filename
 
-        if is_cpp_file(file_path):
-            apply_clang_format(file_path)
+def file_needs_formatting(file: Path):
+    if utils.is_cpp_file(file):
+        return cpp_file_needs_formatting(file)
 
-        if is_cmake_file(file_path):
-            apply_cmake_format(file_path)
+    if utils.is_cmake_file(file):
+        return cmake_file_needs_formatting(file)
 
-        if is_python_file(file_path):
-            apply_autopep8(file_path)
+    if utils.is_python_file(file):
+        return python_file_needs_formatting(file)
+
+
+def any_files_need_formatting(files):
+    return any([file_needs_formatting(file) for file in files])
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--check', action='store_true')
+
+    args = parser.parse_args()
+
+    with utils.git_repo_as_working_dir():
+        if args.check:
+            if any_files_need_formatting(utils.list_git_files()):
+                utils.exit('error: files need formatting')
+        else:
+            apply_formatting_to_files(utils.list_git_files())
