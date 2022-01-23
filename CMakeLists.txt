@@ -2,9 +2,14 @@ cmake_minimum_required(VERSION 3.15)
 
 option(JUCEY_CATCH2_FETCH_CATCH2
        "Automatically fetch the latest version of the Catch2 git repo" ON)
+
 option(JUCEY_CATCH2_FETCH_JUCE
        "Automatically fetch the latest version of the JUCE git repo" OFF)
+
 option(JUCEY_CATCH2_ADD_TEST_TARGETS "Add build targets for the tests" OFF)
+
+option(JUCEY_CATCH2_AUTO_FILE_FOTMATTER
+       "Add a target that formats all files when an all build is triggered" ON)
 
 project(
   jucey-catch2
@@ -30,5 +35,11 @@ message(CHECK_PASS "done")
 if(JUCEY_CATCH2_ADD_TEST_TARGETS)
   message(CHECK_START "Adding jucey-catch2 test targets")
   add_subdirectory(tests)
+  message(CHECK_PASS "done")
+endif()
+
+if(JUCEY_CATCH2_AUTO_FILE_FOTMATTER)
+  message(CHECK_START "Adding jucey-catch2 auto-file-formatter target")
+  include(cmake/auto-file-formatter.cmake)
   message(CHECK_PASS "done")
 endif()
