@@ -10,6 +10,9 @@ target_link_libraries(
 
 target_compile_features(jucey-catch2-tests PRIVATE cxx_std_17)
 
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+
 include(CTest)
+include(Dart)
 include(Catch)
 catch_discover_tests(jucey-catch2-tests)
